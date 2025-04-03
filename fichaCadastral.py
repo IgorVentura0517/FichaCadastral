@@ -1,5 +1,6 @@
 
 from tkinter import *
+from tkinter import ttk
 
 window = Tk()
 
@@ -12,6 +13,7 @@ class App():
         self.divisoes_da_tela()
         self.criacao_labels()
         self.criacao_botoes()
+        self.lista_div2()
         window.mainloop()
         
 
@@ -87,6 +89,28 @@ class App():
         self.input_cidade = Entry(self.div_1, highlightbackground="gray", highlightthickness=1)
         self.input_cidade.place(relx=0.5, rely=0.68, relwidth=0.35, relheight=0.08)
 
+
+# Função de criação da lista da section 2
+
+    def lista_div2(self):
+        self.listaClientes = ttk.Treeview(self.div_2, height= 3, column=("coluna1", "coluna2", "coluna3", "coluna4"))
+        self.listaClientes.heading("#0", text="")
+        self.listaClientes.heading("#1", text="Código")
+        self.listaClientes.heading("#2", text="Nome")
+        self.listaClientes.heading("#3", text="Telefone")
+        self.listaClientes.heading("#4", text="Cidade")
+
+        self.listaClientes.column("#0", width=0,)
+        self.listaClientes.column("#1", width=50)
+        self.listaClientes.column("#2", width=200)
+        self.listaClientes.column("#3", width=125)
+        self.listaClientes.column("#4", width=125)
+
+        self.listaClientes.place(relx=0.025, rely=0.1, relwidth=0.95, relheight=0.85)
+
+        self.scrollBar = Scrollbar(self.div_2, orient="vertical")
+        self.listaClientes.configure(yscrollcommand= self.scrollBar.set)
+        self.scrollBar.place(relx=0.96, rely=0.1, relwidth=0.04, relheight=0.85)
 
 
 App()
