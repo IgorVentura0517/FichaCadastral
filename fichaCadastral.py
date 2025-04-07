@@ -1,10 +1,43 @@
 
 from tkinter import *
 from tkinter import ttk
+import sqlite3
 
 window = Tk()
 
-class App():
+class Functions:
+    # Função do botão de limpar os dados das Entrys
+    def btn_limpar(self):
+        self.input_codigo.delete(0, END)
+        self.input_nome.delete(0, END)
+        self.input_telefone.delete(0, END)
+        self.input_cidade.delete(0, END)
+
+    def conectar_bd(self):
+        self.conectar = sqlite3.connect("Clientes.bd")
+        self.cursor = self.conectar.cursor()
+
+    def desconectar_bd(self):
+        self.conectar.close()
+
+    def montar_bd(self):
+        self.conectar_bd()
+        self.cursor.execute("""
+            CREATE TABLE IF NOT EXISTS Clientes(
+                cod INTEGER PRIMARY KEY,
+                nome_cliente CHAR(40) NOT NULL,
+                telefone INTEGER(20),
+                cidade CHAR(40)
+            );
+        """)
+        self.conectar.commit()
+        self.desconectar_bd()
+
+
+
+
+# Classe prinpical da ficha cadastral
+class App(Functions):
 
 # Função de loop para inicialização da janela
     def __init__(self):
@@ -14,6 +47,7 @@ class App():
         self.criacao_labels()
         self.criacao_botoes()
         self.lista_div2()
+        self.montar_bd()
         window.mainloop()
         
 
@@ -40,7 +74,7 @@ class App():
     def criacao_botoes(self):
 
         #Botão limpar
-        self.btn_Limpar = Button(self.div_1, text="Limpar", bd=4, bg='#A9A9A9', fg='white', font=('verdana', 8, 'bold'))
+        self.btn_Limpar = Button(self.div_1, text="Limpar", bd=4, bg='#A9A9A9', fg='white', font=('verdana', 8, 'bold',), command=self.btn_limpar)
         self.btn_Limpar.place(relx=0.1, rely=0.06, relwidth=0.1, relheight=0.08)
 
         #Botão buscar
@@ -48,16 +82,16 @@ class App():
         self.btn_Buscar.place(relx=0.21, rely=0.06, relwidth=0.1, relheight=0.08)
 
         #Botão novo
-        self.btn_Buscar = Button(self.div_1, text="Novo", bd=4, bg='#A9A9A9', fg='white', font=('verdana', 8, 'bold'))
-        self.btn_Buscar.place(relx=0.6, rely=0.06, relwidth=0.1, relheight=0.08)
+        self.btn_Novo = Button(self.div_1, text="Novo", bd=4, bg='#A9A9A9', fg='white', font=('verdana', 8, 'bold'))
+        self.btn_Novo.place(relx=0.6, rely=0.06, relwidth=0.1, relheight=0.08)
 
         #Botão alterar
-        self.btn_Buscar = Button(self.div_1, text="Alterar", bd=4, bg='#A9A9A9', fg='white', font=('verdana', 8, 'bold'))
-        self.btn_Buscar.place(relx=0.71, rely=0.06, relwidth=0.1, relheight=0.08)
+        self.btn_Alterar = Button(self.div_1, text="Alterar", bd=4, bg='#A9A9A9', fg='white', font=('verdana', 8, 'bold'))
+        self.btn_Alterar .place(relx=0.71, rely=0.06, relwidth=0.1, relheight=0.08)
 
         #Botão apagar
-        self.btn_Buscar = Button(self.div_1, text="Apagar", bd=4, bg='#A9A9A9', fg='white', font=('verdana', 8, 'bold'))
-        self.btn_Buscar.place(relx=0.82, rely=0.06, relwidth=0.1, relheight=0.08)
+        self.btn_Apagar = Button(self.div_1, text="Apagar", bd=4, bg='#A9A9A9', fg='white', font=('verdana', 8, 'bold'))
+        self.btn_Apagar.place(relx=0.82, rely=0.06, relwidth=0.1, relheight=0.08)
     
     def criacao_labels(self):
 
@@ -111,6 +145,7 @@ class App():
         self.scrollBar = Scrollbar(self.div_2, orient="vertical")
         self.listaClientes.configure(yscrollcommand= self.scrollBar.set)
         self.scrollBar.place(relx=0.96, rely=0.1, relwidth=0.04, relheight=0.85)
+
 
 
 App()
